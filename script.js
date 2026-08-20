@@ -54,10 +54,12 @@ mobileLinks.forEach(link => {
 /* ---- Typing Animation ---- */
 const typedEl = document.getElementById('typed-text');
 const phrases = [
-    'Web Developer.',
+    'Full-Stack Developer.',
+    'React.js Specialist.',
+    'Frontend Engineer.',
+    'Python & Backend Developer.',
     'UI/UX Designer.',
-    'Problem Solver.',
-    'Creative Coder.',
+    'Software Engineer.'
 ];
 let phraseIndex = 0;
 let charIndex = 0;
@@ -151,7 +153,7 @@ if (statsRow) observer.observe(statsRow);
 if (skillsList) observer.observe(skillsList);
 
 /* ---- Add reveal class to section children dynamically ---- */
-document.querySelectorAll('.service-card, .project-card, .contact-card').forEach((el, i) => {
+document.querySelectorAll('.service-card, .project-card, .contact-card, .timeline-card').forEach((el, i) => {
     el.classList.add('reveal');
     el.style.transitionDelay = `${(i % 3) * 0.1}s`;
 });
@@ -224,15 +226,84 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+/* ---- AOS Animation Initialization ---- */
+if (typeof AOS !== 'undefined') {
+    AOS.init({
+        duration: 800,
+        easing: 'ease-out-cubic',
+        once: false,
+        offset: 50,
+    });
+}
+
+/* ---- Cursor Spotlight Follower (Framer-Motion style) ---- */
+const cursorGlow = document.getElementById('cursor-glow');
+if (cursorGlow && window.innerWidth > 768) {
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let glowX = mouseX;
+    let glowY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    }, { passive: true });
+
+    function animateGlow() {
+        glowX += (mouseX - glowX) * 0.12;
+        glowY += (mouseY - glowY) * 0.12;
+        cursorGlow.style.left = `${glowX}px`;
+        cursorGlow.style.top = `${glowY}px`;
+        requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+}
+
+/* ---- 3D Card Tilt Micro-Interaction ---- */
+const tiltCards = document.querySelectorAll('.project-card, .service-card, .timeline-card, .contact-card');
+tiltCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+    });
+});
+
+/* ---- Magnetic Button Hover Effect ---- */
+const magneticBtns = document.querySelectorAll('.btn-primary, .btn-secondary, .btn-contact, .social-btn');
+magneticBtns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+    });
+});
+
 /* ---- Theme toggle (decorative) ---- */
 const themeToggle = document.getElementById('theme-toggle');
-const themeIcon = themeToggle.querySelector('.theme-icon');
+const themeIcon = themeToggle ? themeToggle.querySelector('.theme-icon') : null;
 let isDark = true;
 
-themeToggle.addEventListener('click', () => {
-    isDark = !isDark;
-    themeIcon.textContent = isDark ? '☀️' : '🌙';
-    // Minimal light mode tint (keeps brand feel)
-    document.body.style.setProperty('--bg-primary', isDark ? '#0d0718' : '#13092a');
-    document.body.style.setProperty('--bg-secondary', isDark ? '#110c20' : '#170d2e');
-});
+if (themeToggle && themeIcon) {
+    themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        themeIcon.textContent = isDark ? '☀️' : '🌙';
+        document.body.style.setProperty('--bg-primary', isDark ? '#0d0718' : '#13092a');
+        document.body.style.setProperty('--bg-secondary', isDark ? '#110c20' : '#170d2e');
+    });
+}
