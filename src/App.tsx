@@ -505,13 +505,17 @@ export default function App() {
           <div className="projects-grid">
             <AnimatePresence mode="sync">
               {filtered.map((project, i) => (
-                <motion.div
+                <motion.a
                   key={project.id}
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="project-card"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
                   transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.18) }}
+                  aria-label={`Open ${project.name} live site`}
                 >
                   <div className="project-img-wrap">
                     {project.image ? (
@@ -530,9 +534,7 @@ export default function App() {
                       <p>{project.label}</p>
                     </div>
                     <div className="project-overlay">
-                      <a href={project.url} target="_blank" rel="noopener noreferrer" className="project-link">
-                        View Live ↗
-                      </a>
+                      <span className="project-link">View Live ↗</span>
                     </div>
                   </div>
                   <div className="project-info">
@@ -540,7 +542,7 @@ export default function App() {
                     <p className="project-desc-small">{project.description}</p>
                     <p className="project-tech">{project.tech}</p>
                   </div>
-                </motion.div>
+                </motion.a>
               ))}
             </AnimatePresence>
           </div>
