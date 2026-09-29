@@ -54,11 +54,11 @@ mobileLinks.forEach(link => {
 /* ---- Typing Animation ---- */
 const typedEl = document.getElementById('typed-text');
 const phrases = [
-    'Full-Stack Developer.',
-    'React.js Specialist.',
     'Frontend Engineer.',
-    'Python & Backend Developer.',
-    'UI/UX Designer.',
+    'Full-Stack Engineer.',
+    'Next.js Specialist.',
+    'React & TypeScript Developer.',
+    'API & Backend Developer.',
     'Software Engineer.'
 ];
 let phraseIndex = 0;
@@ -176,7 +176,8 @@ filterBtns.forEach(btn => {
 
         const filter = btn.getAttribute('data-filter');
         projectCards.forEach(card => {
-            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            const categories = (card.getAttribute('data-category') || '').split(/\s+/);
+            if (filter === 'all' || categories.includes(filter)) {
                 card.classList.remove('hidden');
                 card.style.animation = 'fadeSlideUp 0.4s ease both';
             } else {

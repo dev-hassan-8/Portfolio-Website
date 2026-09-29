@@ -183,9 +183,10 @@ button {
 
 .section-subtitle {
   color: var(--text-secondary);
-  font-size: 1.05rem;
-  max-width: 560px;
-  margin-bottom: 56px;
+  font-size: 1.02rem;
+  max-width: 640px;
+  margin-bottom: 48px;
+  line-height: 1.65;
 }
 
 /* ============================================================
@@ -793,14 +794,15 @@ button {
 }
 
 .tech-pill {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--radius-xl);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
   background: rgba(224, 64, 251, 0.08);
   border: 1px solid rgba(224, 64, 251, 0.22);
   color: #f0abfc;
   transition: var(--transition);
+  letter-spacing: 0.01em;
 }
 
 .tech-pill:hover {
@@ -865,13 +867,12 @@ button {
 }
 
 .timeline-heading {
-  font-size: 1.25rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  color: var(--accent-pink);
+  margin-bottom: 4px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .timeline-card {
@@ -1025,16 +1026,16 @@ button {
 /* Filter buttons */
 .filter-btns {
   display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
+  gap: 10px;
+  margin-bottom: 36px;
   flex-wrap: wrap;
 }
 
 .filter-btn {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 10px 24px;
-  border-radius: var(--radius-xl);
+  padding: 9px 20px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   color: var(--text-secondary);
   background: transparent;
@@ -1053,11 +1054,11 @@ button {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 22px;
 }
 
 .project-card {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -1068,7 +1069,7 @@ button {
 
 .project-card:hover {
   border-color: var(--border-hover);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-glow);
 }
 
@@ -1079,7 +1080,7 @@ button {
 .project-img-wrap {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
 }
 
 .project-placeholder {
@@ -1090,14 +1091,18 @@ button {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
   transition: var(--transition);
 }
 
 .project-placeholder span {
-  font-size: 1.9rem;
+  font-size: 1.75rem;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .p1 {
@@ -1157,31 +1162,37 @@ button {
 }
 
 .project-info {
-  padding: 18px 20px;
+  padding: 20px 20px 22px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  gap: 0;
 }
 
 .project-name {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 
 .project-desc-small {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 10px;
+  line-height: 1.6;
+  margin-bottom: 14px;
   flex-grow: 1;
 }
 
 .project-tech {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: 0.72rem;
+  color: var(--accent-pink);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  opacity: 0.9;
 }
 
 /* ============================================================
