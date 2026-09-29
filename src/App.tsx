@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FadeIn } from './components/FadeIn'
 import { usePortfolioEffects } from './hooks/usePortfolioEffects'
-import { phrases, projects, skills, techPills } from './data/content'
+import { phrases, projects, skills, techPills, FORMSUBMIT_ENDPOINT } from './data/content'
 
 function useTypedText(items: string[]) {
   const [text, setText] = useState('')
@@ -73,6 +73,7 @@ export default function App() {
   const [statsInView, setStatsInView] = useState(false)
   const [skillsInView, setSkillsInView] = useState(false)
   const [formSuccess, setFormSuccess] = useState(false)
+  const [formError, setFormError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [isDark, setIsDark] = useState(true)
   const formTimers = useRef<number[]>([])
@@ -92,26 +93,68 @@ export default function App() {
   const closeMenu = () => setMenuOpen(false)
 
   useEffect(() => {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'light') {
+      setIsDark(false)
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
     return () => {
       formTimers.current.forEach((id) => window.clearTimeout(id))
       document.body.classList.remove('cursor-click', 'cursor-hover')
     }
   }, [])
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const toggleTheme = () => {
+    const nextDark = !isDark
+    setIsDark(nextDark)
+    document.documentElement.setAttribute('data-theme', nextDark ? 'dark' : 'light')
+    localStorage.setItem('theme', nextDark ? 'dark' : 'light')
+  }
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
-    if (![...data.values()].every((v) => String(v).trim())) return
+    const name = String(data.get('name') || '').trim()
+    const email = String(data.get('email') || '').trim()
+    const subject = String(data.get('subject') || '').trim()
+    const message = String(data.get('message') || '').trim()
+    if (!name || !email || !subject || !message) {
+      setFormError('Please fill in all fields.')
+      return
+    }
+
     setSubmitting(true)
-    const sendTimer = window.setTimeout(() => {
+    setFormError('')
+    setFormSuccess(false)
+
+    try {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+          _subject: `Portfolio contact: ${subject}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      })
+      if (!res.ok) throw new Error('Failed to send')
       setFormSuccess(true)
       form.reset()
-      setSubmitting(false)
-      const hideTimer = window.setTimeout(() => setFormSuccess(false), 4000)
+      const hideTimer = window.setTimeout(() => setFormSuccess(false), 5000)
       formTimers.current.push(hideTimer)
-    }, 900)
-    formTimers.current.push(sendTimer)
+    } catch {
+      setFormError('Could not send right now. Email me directly at freshfind.shop1@gmail.com')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -152,12 +195,7 @@ export default function App() {
             <button
               className="theme-toggle"
               aria-label="Toggle theme"
-              onClick={() => {
-                const next = !isDark
-                setIsDark(next)
-                document.body.style.setProperty('--bg-primary', next ? '#0d0718' : '#13092a')
-                document.body.style.setProperty('--bg-secondary', next ? '#110c20' : '#170d2e')
-              }}
+              onClick={toggleTheme}
             >
               <span className="theme-icon">{isDark ? '☀️' : '🌙'}</span>
             </button>
@@ -476,6 +514,17 @@ export default function App() {
                   transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.18) }}
                 >
                   <div className="project-img-wrap">
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={`${project.name} preview`}
+                        className="project-thumb"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    ) : null}
                     <div className={`project-placeholder ${project.placeholder}`}>
                       <span>{project.emoji}</span>
                       <p>{project.label}</p>
@@ -572,6 +621,7 @@ export default function App() {
                 <p className={`form-success${formSuccess ? ' visible' : ''}`}>
                   Message sent! I&apos;ll get back to you soon.
                 </p>
+                {formError ? <p className="form-error visible">{formError}</p> : null}
               </form>
             </FadeIn>
           </div>

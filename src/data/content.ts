@@ -8,6 +8,8 @@ export type Project = {
   placeholder: string
   emoji: string
   label: string
+  image: string
+  github?: string
 }
 
 export const projects: Project[] = [
@@ -22,6 +24,7 @@ export const projects: Project[] = [
     placeholder: 'p1',
     emoji: '🏟️',
     label: 'Sports Booking',
+    image: '/projects/turfn.png',
   },
   {
     id: 'geo',
@@ -34,6 +37,7 @@ export const projects: Project[] = [
     placeholder: 'p2',
     emoji: '🌍',
     label: 'AI Assistant',
+    image: '/projects/geo.png',
   },
   {
     id: 'vip',
@@ -46,6 +50,7 @@ export const projects: Project[] = [
     placeholder: 'p4',
     emoji: '✨',
     label: 'VIP Assistant',
+    image: '/projects/vip.png',
   },
   {
     id: 'microrage',
@@ -58,6 +63,7 @@ export const projects: Project[] = [
     placeholder: 'p6',
     emoji: '⚡',
     label: 'Software Agency',
+    image: '/projects/microrage.png',
   },
   {
     id: 'cineflix',
@@ -70,6 +76,7 @@ export const projects: Project[] = [
     placeholder: 'p2',
     emoji: '🎬',
     label: 'Movie Platform',
+    image: '/projects/cineflix.png',
   },
   {
     id: 'weipa',
@@ -82,6 +89,7 @@ export const projects: Project[] = [
     placeholder: 'p3',
     emoji: '🚗',
     label: 'Client Project',
+    image: '/projects/weipa.png',
   },
 ]
 
@@ -118,3 +126,6 @@ export const skills = [
   { label: 'Databases (PostgreSQL, MySQL, Query Optimization)', width: 82 },
   { label: 'State, UI Systems & Responsive Design', width: 90 },
 ]
+
+export const CONTACT_EMAIL = 'freshfind.shop1@gmail.com'
+export const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`

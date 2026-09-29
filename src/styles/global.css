@@ -1143,9 +1143,28 @@ button {
   position: relative;
   overflow: hidden;
   aspect-ratio: 16/9;
+  background: var(--bg-card);
+}
+
+.project-thumb {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-card:hover .project-thumb {
+  transform: scale(1.05);
 }
 
 .project-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -1407,9 +1426,22 @@ button {
   color: #4caf50;
   text-align: center;
   display: none;
+  margin-top: 12px;
 }
 
 .form-success.visible {
+  display: block;
+}
+
+.form-error {
+  font-size: 0.9rem;
+  color: #ff8a80;
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.form-error.visible {
   display: block;
 }
 
@@ -2163,4 +2195,50 @@ body {
   body.fx-ready {
     cursor: auto;
   }
+}
+
+/* Light theme */
+html[data-theme='light'] {
+  --bg-primary: #f7f4fb;
+  --bg-secondary: #efe8f8;
+  --bg-card: #ffffff;
+  --bg-card-hover: #faf7ff;
+  --text-primary: #1a1228;
+  --text-secondary: #5a526c;
+  --text-muted: #8a8298;
+  --border: rgba(80, 40, 120, 0.12);
+  --border-hover: rgba(156, 39, 176, 0.45);
+  --glow: rgba(156, 39, 176, 0.1);
+  --glow-strong: rgba(156, 39, 176, 0.2);
+  --shadow-card: 0 8px 28px rgba(40, 20, 60, 0.08);
+  --shadow-glow: 0 0 36px rgba(224, 64, 251, 0.15);
+}
+
+html[data-theme='light'] body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+html[data-theme='light'] .navbar.scrolled {
+  background: rgba(247, 244, 251, 0.88);
+}
+
+html[data-theme='light'] .scene-3d,
+html[data-theme='light'] .cursor-glow {
+  opacity: 0.45;
+}
+
+html[data-theme='light'] .tech-pill {
+  color: #7b1fa2;
+  background: rgba(156, 39, 176, 0.08);
+  border-color: rgba(156, 39, 176, 0.2);
+}
+
+html[data-theme='light'] body.fx-ready {
+  cursor: auto;
+}
+
+html[data-theme='light'] .cursor-dot,
+html[data-theme='light'] .cursor-ring {
+  display: none !important;
 }
