@@ -66,7 +66,6 @@
 .contact-card {
   position: relative;
   overflow: hidden;
-  will-change: transform;
 }
 
 .project-card::after,
@@ -107,12 +106,14 @@ html {
   scroll-padding-top: var(--nav-height);
 }
 
-body {
+  body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -1691,9 +1692,8 @@ body.cursor-click .cursor-ring {
   position: absolute;
   border-radius: 50%;
   filter: blur(40px);
-  opacity: 0.55;
-  will-change: transform;
-  animation: orbFloat 12s ease-in-out infinite;
+  opacity: 0.45;
+  animation: orbFloat 16s ease-in-out infinite;
 }
 
 .orb-a {

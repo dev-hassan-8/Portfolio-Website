@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FadeIn } from './components/FadeIn'
 import { usePortfolioEffects } from './hooks/usePortfolioEffects'
@@ -10,9 +10,11 @@ function useTypedText(items: string[]) {
     let phraseIndex = 0
     let charIndex = 0
     let deleting = false
-    let timer: number
+    let timer = 0
+    let alive = true
 
     const tick = () => {
+      if (!alive) return
       const current = items[phraseIndex]
       if (deleting) {
         charIndex -= 1
@@ -35,7 +37,10 @@ function useTypedText(items: string[]) {
     }
 
     tick()
-    return () => window.clearTimeout(timer)
+    return () => {
+      alive = false
+      window.clearTimeout(timer)
+    }
   }, [items])
 
   return text
@@ -70,6 +75,7 @@ export default function App() {
   const [formSuccess, setFormSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [isDark, setIsDark] = useState(true)
+  const formTimers = useRef<number[]>([])
 
   const years = useCountUp(2, statsInView)
   const live = useCountUp(6, statsInView)
@@ -85,18 +91,27 @@ export default function App() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  useEffect(() => {
+    return () => {
+      formTimers.current.forEach((id) => window.clearTimeout(id))
+      document.body.classList.remove('cursor-click', 'cursor-hover')
+    }
+  }, [])
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
     if (![...data.values()].every((v) => String(v).trim())) return
     setSubmitting(true)
-    window.setTimeout(() => {
+    const sendTimer = window.setTimeout(() => {
       setFormSuccess(true)
       form.reset()
       setSubmitting(false)
-      window.setTimeout(() => setFormSuccess(false), 5000)
-    }, 1200)
+      const hideTimer = window.setTimeout(() => setFormSuccess(false), 4000)
+      formTimers.current.push(hideTimer)
+    }, 900)
+    formTimers.current.push(sendTimer)
   }
 
   return (
@@ -450,16 +465,15 @@ export default function App() {
           </div>
 
           <div className="projects-grid">
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="sync">
               {filtered.map((project, i) => (
                 <motion.div
                   key={project.id}
                   className="project-card"
-                  layout
-                  initial={{ opacity: 0, y: 24, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.35, delay: i * 0.04 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.18) }}
                 >
                   <div className="project-img-wrap">
                     <div className={`project-placeholder ${project.placeholder}`}>
